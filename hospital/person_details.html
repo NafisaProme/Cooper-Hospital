@@ -1,0 +1,109 @@
+{% load static %}
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Account Information</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/person_details.css' %}">
+    <link rel="stylesheet" href="{% static 'css/homepage.css' %}">  
+    <script src="{% static 'js/script.js' %}" defer></script>
+</head>
+<header>
+    <div class="logo"><img src="\static\images\logo.png" alt=""></div>
+
+    <nav class="navbar">
+        <a href="{% url 'get_homepage' %}">&nbsp; &nbsp;&nbsp; &nbsp; Home</a>
+        <a href="#services">Services</a>
+        <a href="{% url 'doctor_list' %}">Doctors</a>
+        <a href="{% url 'about' %}">About</a>
+        <a href="{% url 'contact' %}"">Contact  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp;</a>
+
+        {% if user.is_authenticated %}
+        <a href=" {% url 'get_person' %}">Profile</a>
+        <a href="logout">Logout</a>
+        {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'add_person' %}">Signup</a>
+        {% endif %}
+    </nav>
+
+</header>
+<br><br><br><br><br><br>
+
+<body>
+    <section class="py-5 my-5">
+    
+        <div class="container">
+
+            <div class="bg-skyish shadow rounded-lg d-block d-sm-flex">
+                <div class="profile-tab-nav border-right">
+                    <div class="p-4">
+                        <div class="img-circle text-center mb-3">
+                            <img src="/static/images/avatar.jpg" alt="Image" class="shadow">
+                        </div>
+
+                    </div>
+                    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                        <a class="nav-link active" id="account-tab" data-toggle="pill" href="#account" role="tab"
+                            aria-controls="account" aria-selected="true">
+                            <i class="fa fa-home text-center mr-1"></i>
+                            Account
+                        </a>
+                        <a class="nav-link" id="notification-tab" data-toggle="pill" href="#notification" role="tab"
+                            aria-controls="notification" aria-selected="false">
+                            <i class="fa fa-bell text-center mr-1"></i>
+                            Appointments
+                        </a>
+                    </div>
+                </div>
+                <div class="tab-content p-4 p-md-5" id="v-pills-tabContent">
+                    <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
+                        <h3 class="mb-4">Account Information</h3>
+                        <div class="container-lg">
+                            <div class="form-group">
+                                {% block content %}
+                                <form method="post">
+                                    {% csrf_token %}
+                                    {{ form.as_p }}
+                                    <div>
+                                        <button type="submit" class="btn btn-primary">Update</button>
+                                        <button class="btn btn-light">Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                            
+                    </div>
+                    <div class="tab-pane fade" id="notification" role="tabpanel" aria-labelledby="notification-tab">
+                        {% for appointment in appointments %}
+                        {% if is_doctor %}
+                        <p> Appointment on {{ appointment.scheduled_time }} with {{ appointment.patient.name }}</p>
+                        {% else %}
+                        <p> Appointment on {{ appointment.scheduled_time }} with {{ appointment.doctor.name }}</p>
+                        {% endif %}
+                        {% endfor %}
+                    
+                        {% endblock %}
+                    </div>
+                        
+                </div>
+
+                
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+
+</html>

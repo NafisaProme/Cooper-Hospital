@@ -1,0 +1,69 @@
+{% load socialaccount %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
+        integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="{% static 'css/doctor_info.css' %}">
+    <script src="{% static 'js/script.js' %}" defer></script>
+
+</head>
+<header>
+    <div class="logo"><img src="\static\images\logo.png" alt=""></div>
+
+    <nav class="navbar">
+        <a href="{% url 'get_homepage' %}">&nbsp; &nbsp;&nbsp; &nbsp; Home</a>
+        <a href="#services">Services</a>
+        <a href="{% url 'doctor_list' %}">Doctors</a>
+        <a href="{% url 'about' %}">About</a>
+        <a href="{% url 'contact' %}"">Contact  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp;</a>
+
+        {% if user.is_authenticated %}
+        <a href=" {% url 'get_person' %}">Profile</a>
+        <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'add_person' %}">Signup</a>
+        {% endif %}
+    </nav>
+
+    
+</header>
+
+
+<body>
+    <div class="slide-container">
+        <h1 class="slide-text">Meet Our Specialist</h1>
+    </div> 
+    {% for doctor in doctors %}
+    <div class="container {% if forloop.counter <= 2 %}special-margin{% endif %}">
+
+            <h2>{{ doctor.name }}</h2>
+            <br>
+            <img src="{{ doctor.image.url }}" alt="{{ doctor.name }} Image" width="200">
+            <br>
+            <p>Date of Birth: {{ doctor.dob }}</p>
+            <p>Age: {{ doctor.age }}</p>
+            <p>Gender: {{ doctor.gen }}</p>
+            <p>Email: {{ doctor.email }}</p>
+            <p>Phone: {{ doctor.phn }}</p>
+            <p style="color: red;">Degree: {{ doctor.degree }}</p>
+            <p style="color: red;">Specialization: {{ doctor.specialization }}</p>
+            <br>
+            <a href="{% url 'get_appointment' doctor.id %}">
+                <button class="button" type="button">Make an Appointment</button>
+            </a>
+    </div>
+    {% endfor %}
+</body>
+
+</html>
